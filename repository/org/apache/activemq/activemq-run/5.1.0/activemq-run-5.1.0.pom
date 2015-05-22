@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <parent>
+    <artifactId>activemq-parent</artifactId>
+    <groupId>org.apache.activemq</groupId>
+    <version>5.1.0</version>
+  </parent>
+  <modelVersion>4.0.0</modelVersion>
+  <artifactId>activemq-run</artifactId>
+  <name>ActiveMQ :: Run Jar</name>
+  <version>5.1.0</version>
+  <description>run.jar for starting a standalone ActiveMQ broker</description>
+  <build>
+    <plugins>
+      <plugin>
+        <artifactId>maven-jar-plugin</artifactId>
+        <configuration>
+          <archive>
+            <manifest>
+              <mainClass>org.apache.activemq.console.Main</mainClass>
+            </manifest>
+            <index>true</index>
+            <compress>true</compress>
+          </archive>
+        </configuration>
+      </plugin>
+      <plugin>
+        <artifactId>maven-shade-plugin</artifactId>
+        <version>1.0.1</version>
+        <executions>
+          <execution>
+            <id>main-class</id>
+            <phase>package</phase>
+            <goals>
+              <goal>shade</goal>
+            </goals>
+            <configuration>
+              <artifactSet>
+                <includes>
+                  <include>${project.groupId}:activemq-console</include>
+                </includes>
+              </artifactSet>
+              <filters>
+                <filter>
+                  <artifact>${project.groupId}:activemq-console</artifact>
+                  <includes>
+                    <include>org/apache/activemq/console/Main*.class</include>
+                  </includes>
+                </filter>
+              </filters>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <configuration>
+          <skip>true</skip>
+          <test>false</test>
+          <forkMode>once</forkMode>
+          <redirectTestOutputToFile>true</redirectTestOutputToFile>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+</project>
+
